@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="head">
+		<style type="text/css">
+.cars-datalist .text-column p:last-child {
+	color: #757575;
+}
+
+.cars-datalist .car-item i, .cars-datalist .car-item .car-details {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.cars-datalist .car-item button {
+	float: right;
+}
+
+.cars-datalist ul {
+	margin: 0;
+	padding: 0;
+}
+
+.ui-car-display td:last-child {
+	font-weight: 700;
+}
+
+@media ( max-width :640px) {
+	.cars-datalist .text-column {
+		text-align: center;
+	}
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">Data</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:panelGrid columns="4" layout="grid"
+							styleClass="ui-panelgrid-blank form-group" style="padding:10px;">
+							<h:panelGrid columns="1">
+								<h:outputLabel value="Profile Picture" />
+								
+								<p:graphicImage cache="false"
+									style="position:center;height: 200px; width:150px;"
+									styleClass="img-circle" value="#{login.profilePic}">
+									<f:param name="image" value="#{login.request.orphan.orphanId}" />
+								</p:graphicImage>
+							</h:panelGrid>
+							<h:panelGrid columns="1">
+								
+								<h:outputLabel
+									value="Names are: #{login.request.orphan.firstName} #{login.request.orphan.lastName}" />
+								<h:outputLabel value="Gender: #{login.request.orphan.gender}" />
+								
+								<h:outputLabel value="Date Of Birth: #{login.request.orphan.dob}" />
+								
+								<h:outputLabel value="Education Background: #{login.request.orphan.education}" />
+								
+								<h:outputLabel value="Father Name: #{login.request.orphan.fatherName}" />
+								
+								<h:outputLabel value="Mother Name: #{login.request.orphan.motherName}" />
+							</h:panelGrid>
+							<h:panelGrid columns="1">
+								
+								<h:outputLabel value="Height: #{login.request.orphan.height} meters" />
+								
+								<h:outputLabel value="Weight: #{login.request.orphan.weight} kilograms" />
+								
+								<h:outputLabel value="Hobbies: #{login.request.orphan.hobbit}" />
+								
+								<h:outputLabel value="Other: #{login.request.orphan.comment}" />
+								<h:panelGroup>
+									<h:panelGroup rendered="#{login.request.orphan.orphanage != null}">
+									<h:panelGrid columns="2">
+										<h:outputLabel value="Orphanage name:" />
+										<h:outputLabel value="#{login.request.orphan.orphanage.name}" />
+										<h:outputLabel value="Province:" />
+										<h:outputLabel
+											value="#{login.request.orphan.orphanage.district.province.name}" />
+										<h:outputLabel value="District:" />
+										<h:outputLabel value="#{login.request.orphan.orphanage.district.name}" />
+										</h:panelGrid>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{login.request.orphan.malaika != null}">
+									<h:panelGrid columns="2">
+										<h:outputLabel value="Malaika Murinzi Names:" />
+										<h:outputLabel
+											value="#{login.request.orphan.malaika.firstName} #{login.request.orphan.malaika.lastName}" />
+										<h:outputLabel value="Province:" />
+										<h:outputLabel
+											value="#{login.request.orphan.malaika.district.province.name}" />
+										<h:outputLabel value="District:" />
+										<h:outputLabel value="#{login.request.orphan.malaika.district.name}" />
+										</h:panelGrid>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGrid>
+
+						</p:panelGrid>
+
+					</div>
+				</div>
+
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

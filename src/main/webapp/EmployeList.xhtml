@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templateEmploye.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl life="4000" showDetail="true" escape="true"
+				autoUpdate="true" />
+				<div>
+				<h:panelGroup style="float:right; margin-bottom:15px;">
+                <p:selectOneMenu value="#{login.province.provinceId}">
+				<f:selectItem itemLabel="Search by Province" itemValue="" noSelectionOption="true"/>
+				<f:selectItems value="#{login.provinceList}" var="pro" itemLabel="#{pro.name}" itemValue="#{pro.provinceId}"/>
+				<f:ajax listener="#{login.searchByProvince()}" render="tab1"/>
+				</p:selectOneMenu>
+				<p:outputLabel/>
+				<p:commandButton icon="fa fa-filter"/>
+				</h:panelGroup>
+			</div>
+				<p:breadCrumb>
+				<p:menuitem outcome="EmployeList" />
+				<p:menuitem value="Applicant Name: #{login.request.applicant.firstName}  #{login.request.applicant.lastName} from: #{login.request.applicant.district.province.name}, #{login.request.applicant.district.name}"/>
+			</p:breadCrumb>
+			<p:dataTable  var="emp" value="#{login.empList}" id="tab1"
+				style="margin-top:20px;" paginator="true" rows="10" selection="#{login.employee}" rowKey="#{emp.empId}">
+				<f:facet name="header">List of Persons who are in change of Adoption in District</f:facet>
+				
+				<p:column headerText="No" style="width:100px;">
+				<p:outputLabel value="#{i=i+1}"/>
+		      </p:column>
+				<p:column headerText="Names">
+				<p:outputLabel value=" #{emp.firstName}  #{emp.lastName}"/>
+		       </p:column>
+		       <p:column headerText="Phone Number">
+				<p:outputLabel value="#{emp.phoneNumber}"/>
+				</p:column>
+				<p:column headerText="Gender" >
+				<p:outputLabel value="#{emp.gender}"/>
+				</p:column>
+				<p:column headerText="Province" >
+				<p:outputLabel value="#{emp.district.province.name}"/>
+				</p:column>
+				<p:column headerText="District" >
+				<h:outputLabel value="#{emp.district.name}" />
+				</p:column>
+				<p:column selectionMode="single" headerText="Select">
+				</p:column>
+			</p:dataTable>
+			<br/>
+			<p:commandButton value="Assign" style="float:right;" ajax="false" actionListener="#{login.assign()}"/>
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

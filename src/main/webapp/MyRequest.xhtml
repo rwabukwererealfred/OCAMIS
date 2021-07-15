@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/userTemp.xhtml">
+
+	<ui:define name="content">
+		<p:messages showDetail="true" escape="true" closable="true" />
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card">
+					<h:form>
+						<p:dataTable style="margin-top:20px;" paginator="true" rows="10"
+							value="#{login.userRequest}" var="req">
+							<f:facet name="header">My Requests</f:facet>
+
+							<p:column headerText="No" style="width:100px;">
+							#{i=i+1}
+						</p:column>
+							<p:column headerText="Names">
+								#{req.applicant.firstName} #{req.applicant.lastName}
+						</p:column>
+							<p:column headerText="Phone Number">
+								#{req.applicant.phoneNumber}
+						</p:column>
+							<p:column headerText="Gender">
+								#{req.applicant.gender}
+						</p:column>
+							<p:column headerText="Province">
+								#{req.applicant.district.province.name}
+						</p:column>
+							<p:column headerText="District">
+						        #{req.applicant.district.name}
+						</p:column>
+							<p:column headerText="Status">
+						        #{req.status}
+						</p:column>
+							<p:column headerText="Orphan">
+								<h:panelGroup>
+									<h:panelGroup rendered="#{req.orphan != null}">
+										<p:commandButton icon="fa fa-slideshare"
+											actionListener="#{creation.orphanPage2(req)}" update="@all"/>
+									</h:panelGroup>
+								</h:panelGroup>
+							</p:column>
+							<p:column headerText="Message">
+								<center>
+									<p:commandButton icon="fa fa-envelope"
+										actionListener="#{login.selectRequest1(req)}"
+										oncomplete="PF('msg').show()" update="@widgetVar(msg)" />
+								</center>
+							</p:column>
+							<p:column headerText="Choose Orphan">
+								<h:panelGroup>
+									<h:panelGroup rendered="#{req.status =='Select Child'}">
+										<center>
+											<p:commandLink action="#{login.chooseOrphan(req)}">
+												<i class="fa fa-send" />
+											</p:commandLink>
+										</center>
+									</h:panelGroup>
+								</h:panelGroup>
+							</p:column>
+						</p:dataTable>
+					</h:form>
+					<h:form>
+						<p:dialog widgetVar="msg"
+							header="Message from NCC(National Commission for Children)"
+							showEffect="clip" hideEffect="clip" closable="true" width="600"
+							modal="true">
+							<p:fieldset legend="content">
+								<p:outputLabel value="#{login.request.message}" rows="10"
+									style="width:98%;" />
+							</p:fieldset>
+						</p:dialog>
+					</h:form>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,247 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/userTemp.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl life="4000" showDetail="true" escape="true" />
+
+			<p:wizard>
+				<p:tab title="Applicant info">
+					<p:panelGrid columns="2" layout="grid"
+						styleClass="ui-panelgrid-blank form-group" style="padding:20px;">
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputText style="width:60%;"
+								value="#{login.applicant.nationalityId}" />
+							<label>National Id</label>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:calendar pattern="dd/MMM/yyyy" style="width:60%;"
+								value="#{login.dob}" />
+							<label>Date Of Birth</label>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputNumber style="width:60%;" value="#{login.applicant.income}" />
+							<label>annual Income</label>
+						</h:panelGroup>
+						<p:panelGrid columns="2">
+							<p:outputLabel value="Martial status:" />
+							<p:selectOneRadio style="width:98%;"
+								value="#{login.applicant.martialStatus}">
+								<f:selectItem itemLabel="Single" itemValue="Single" />
+								<f:selectItem itemLabel="Married" itemValue="Married" />
+								<f:selectItem itemLabel="Divorced" itemValue="Divorced" />
+								<f:selectItem itemLabel="Widow" itemValue="Widow" />
+								<p:ajax listener="#{login.validateDocument()}" update="vali"/>
+							</p:selectOneRadio>
+
+						</p:panelGrid>
+						<p:selectOneMenu value="#{login.province.provinceId}">
+							<f:selectItem itemLabel="Choose Province"
+								noSelectionOption="true" />
+							<f:selectItems value="#{login.provinceList}" var="one"
+								itemLabel="#{one.name}" itemValue="#{one.provinceId}" />
+							<f:ajax listener="#{login.select()}" render="distr" />
+						</p:selectOneMenu>
+						<p:selectOneMenu value="#{login.district.districtID}" id="distr">
+							<f:selectItem itemLabel="Choose District"
+								noSelectionOption="true" />
+							<f:selectItems value="#{login.districtList}" var="di"
+								itemLabel="#{di.name}" itemValue="#{di.districtID}" />
+						</p:selectOneMenu>
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputTextarea style="width:98%;"
+								value="#{login.applicant.motivation}" />
+							<label>Motivation For Adoption</label>
+						</h:panelGroup>
+
+					</p:panelGrid>
+				</p:tab>
+				<p:tab title="Family Member">
+					<p:panelGrid columns="2" layout="grid"
+						styleClass="ui-panelgrid-blank form-group" style="padding:20px;">
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputText value="#{login.family.firstName}" style="width:60%;" />
+							<label>FirstName</label>
+						</h:panelGroup>
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputText value="#{login.family.lastName}" style="width:60%;" />
+							<label>LastName</label>
+						</h:panelGroup>
+						<h:panelGroup styleClass="md-inputfield">
+							<p:calendar value="#{login.dob1}" pattern="dd/MMM/yyyy"
+								style="width:60%;" />
+							<label>Date Of Birth</label>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputText value="#{login.family.nationalityId}"
+								style="width:60%;" />
+							<label>Nationality ID</label>
+						</h:panelGroup>
+						<p:selectOneMenu value="#{login.family.gender}">
+							<f:selectItem itemLabel="Select Gender" noSelectionOption="true" />
+							<f:selectItem itemLabel="Male" itemValue="Male" />
+							<f:selectItem itemLabel="Female" itemValue="Female" />
+						</p:selectOneMenu>
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputText value="#{login.family.phoneNumber}"
+								style="width:60%;" />
+							<label>Phone Number</label>
+						</h:panelGroup>
+						<p:selectOneMenu value="#{login.family.relationship}">
+							<f:selectItem itemLabel="Select relationship"
+								noSelectionOption="true" />
+							<f:selectItem itemLabel="Wife" itemValue="Wife" />
+							<f:selectItem itemLabel="Husband" itemValue="Husband" />
+							<f:selectItem itemLabel="Doughter" itemValue="Doughter" />
+							<f:selectItem itemLabel="Son" itemValue="Son" />
+							<f:selectItem itemLabel="Mother" itemValue="Mother" />
+							<f:selectItem itemLabel="Father" itemValue="Father" />
+							<f:selectItem itemLabel="Other" itemValue="Other" />
+							<f:ajax render="rel"/>
+						</p:selectOneMenu>
+						<h:panelGroup id="rel">
+						<h:panelGroup rendered="#{login.family.relationship == 'Other'}" styleClass="md-inputfield">
+							<p:inputText value="#{login.relationship}"
+								style="width:60%;" />
+							<label>relationship</label>
+						</h:panelGroup>
+						</h:panelGroup>
+					</p:panelGrid>
+					<p:commandButton value="Clear" icon="fa fa-close" actionListener="#{login.deletefami()}"
+						update="form" style="float:right; " />
+					<p:commandButton value="add" icon="fa fa-plus" actionListener="#{login.addFamily()}"
+						update="form" style="float:right; margin-right:15px;" />
+						
+					<br />
+					<br />
+					<br />
+					<p:dataTable value="#{login.familyList}" var="fam">
+					
+						<p:column headerText="Names">
+					#{fam.firstName} #{fam.lastName}
+					</p:column>
+						<p:column headerText="DateOfBirth">
+					#{fam.dob}
+					</p:column>
+						<p:column headerText="Gender">
+					#{fam.gender}
+					</p:column>
+						<p:column headerText="PhoneNumber">
+					#{fam.phoneNumber}
+					</p:column>
+						<p:column headerText="Nationality ID">
+					#{fam.nationalityId}
+					</p:column>
+						<p:column headerText="Relationship">
+					#{fam.relationship}
+					</p:column>
+					</p:dataTable>
+				</p:tab>
+				<p:tab title="AttachDocument">
+					<p:panelGrid columns="1" layout="grid"
+						styleClass="ui-panelgrid-blank form-group" style="padding:20px;">
+						<h:panelGroup id="vali">
+						<h:panelGroup rendered="#{login.validate =='Single'}">
+						<p:selectOneMenu value="#{login.document.documentType}">
+							<f:selectItem itemLabel="Select Document Type" />
+							<f:selectItem itemLabel="Birth certificate"
+								itemValue="Birth certificate" />
+							<f:selectItem itemLabel="Not inprison report"
+								itemValue="Not inprison report" />
+							<f:selectItem itemLabel="Criminal record"
+								itemValue="Criminal record" />
+							<f:selectItem itemLabel="Contract Work" itemValue="Contract Work" />
+							<f:selectItem itemLabel="Property copy" itemValue="Property copy" />
+						</p:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup rendered ="#{login.validate=='Married'}">
+						<p:selectOneMenu value="#{login.document.documentType}">
+							<f:selectItem itemLabel="Select Document Type" />
+							<f:selectItem itemLabel="Birth certificate"
+								itemValue="Birth certificate" />
+							<f:selectItem itemLabel="Not inprison report"
+								itemValue="Not inprison report" />
+							<f:selectItem itemLabel="Criminal record"
+								itemValue="Criminal record" />
+								<f:selectItem itemLabel="Married Certificate"
+								itemValue="Married Certificate" />
+							<f:selectItem itemLabel="Contract Work" itemValue="Contract Work" />
+							<f:selectItem itemLabel="Property copy" itemValue="Property copy" />
+						</p:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup rendered ="#{login.validate=='Divorced'}">
+						<p:selectOneMenu value="#{login.document.documentType}">
+							<f:selectItem itemLabel="Select Document Type" />
+							<f:selectItem itemLabel="Birth certificate"
+								itemValue="Birth certificate" />
+							<f:selectItem itemLabel="Not inprison report"
+								itemValue="Not inprison report" />
+							<f:selectItem itemLabel="Criminal record"
+								itemValue="Criminal record" />
+								<f:selectItem itemLabel="Divorced Copy"
+								itemValue="Divorced Copy" />
+							<f:selectItem itemLabel="Contract Work" itemValue="Contract Work" />
+							<f:selectItem itemLabel="Property copy" itemValue="Property copy" />
+						</p:selectOneMenu>
+						</h:panelGroup>
+						<h:panelGroup rendered ="#{login.validate=='Widow'}">
+						<p:selectOneMenu value="#{login.document.documentType}">
+							<f:selectItem itemLabel="Select Document Type" />
+							<f:selectItem itemLabel="Birth certificate"
+								itemValue="Birth certificate" />
+							<f:selectItem itemLabel="Not inprison report"
+								itemValue="Not inprison report" />
+							<f:selectItem itemLabel="Criminal record"
+								itemValue="Criminal record" />
+								<f:selectItem itemLabel="Widow certificate"
+								itemValue="Widow certificate" />
+							<f:selectItem itemLabel="Contract Work" itemValue="Contract Work" />
+							<f:selectItem itemLabel="Property copy" itemValue="Property copy" />
+						</p:selectOneMenu>
+						</h:panelGroup>
+						</h:panelGroup>
+						
+						<p:fileUpload mode="advanced" dragDropSupport="false"
+							fileUploadListener="#{login.uploadFile}" multiple="true"
+							fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+							style="width:100%" label="File" />
+					</p:panelGrid>
+					<p:commandButton value="Clear" icon="fa fa-close" actionListener="#{login.deletedoc()}"
+						update="form" style="float:right; " />
+					<p:commandButton value="Add Document" icon="fa fa-plus"
+						actionListener="#{login.add()}" update="form" style="float:right; margin-right:15px;" />
+					<br />
+					<br />
+					<br />
+					<p:dataTable value="#{login.ducList}" var="doc">
+						<p:column headerText="No">
+				#{i=i+1}
+				</p:column>
+						<p:column headerText="Document Type">
+				#{doc.documentType}
+				</p:column>
+						<p:column headerText="ScanImage Name">
+				#{doc.image}
+				</p:column>
+					</p:dataTable>
+					<br />
+					<br />
+					<br />
+					<p:commandButton value="ApplyForAdoption" style="float:right;"
+						actionListener="#{login.apply()}" update="form" />
+				</p:tab>
+			</p:wizard>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

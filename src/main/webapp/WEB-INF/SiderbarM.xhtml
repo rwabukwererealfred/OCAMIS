@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pu="http://primefaces.org/ultima">
+
+
+	<p:panel toggleable="true" style="top:148px;position:sticky; width: 223px;">
+		<h:form id="menuform_">
+			<p:growl showDetail="true" />
+			<div class="nano" style="background-color: #f9f9f9;">
+				<div class="nano-content menu-scroll-content">
+					<pu:menu widgetVar="me">
+						<p:menuitem value="Orphanage" icon="&#xE871;" actionListener="#{creation.orphanageListemp()}"/>
+						<p:menuitem value="Guardian Angel" icon="&#xE871;" actionListener="#{creation.guardianListemp()}"/>
+						 <p:submenu id="themes" label="TransferProcess" icon="&#xE40A;">
+						<p:menuitem value="Transfer" actionListener="#{transfering.transferPage()}" icon="&#xE871;">
+						<f:setPropertyActionListener value="#{login.user}" target="#{transfering.user}" />
+						</p:menuitem>
+						</p:submenu>
+					</pu:menu>
+				</div>
+			</div>
+		</h:form>
+	</p:panel>
+
+</ui:composition>

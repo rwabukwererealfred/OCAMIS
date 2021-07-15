@@ -1,0 +1,177 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/temps.xhtml">
+
+	<ui:define name="title">Dashboard</ui:define>
+
+	<ui:define name="head">
+
+		<script type="text/javascript">
+               //<![CDATA[
+               function skinChart() {
+                   this.cfg.shadow = false;
+                   this.cfg.title = '';
+                   this.cfg.seriesColors = ['#FFC107', '#03A9F4'];
+                   this.cfg.grid = {
+                       background: '#ffffff',
+                       borderColor: '#ffffff',
+                       gridLineColor: '#EEEEEE',
+                       shadow: false
+                   };
+                   this.cfg.axesDefaults = {
+                       rendererOptions: {
+                           textColor: '#212121'
+                       }
+                   };
+                   this.cfg.seriesDefaults = {
+                       shadow: false,
+                       lineWidth: 1,
+                       markerOptions: {
+                           shadow: false,
+                           size: 7,
+                           style: 'circle'
+                       }
+                   }
+               }
+               //]]>  
+           </script>
+		<style type="text/css">
+.main-content {
+	padding: 0;
+}
+
+.meeting-datalist .text-column p:last-child {
+	color: #757575;
+}
+
+.meeting-datalist .meeting-item i, .meeting-datalist .meeting-item .meeting-details
+	{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.meeting-datalist .meeting-item button {
+	float: right;
+}
+
+.meeting-datalist ul {
+	margin: 0;
+	padding: 0;
+}
+
+.ui-meeting-display td:last-child {
+	font-weight: 700;
+}
+
+@media ( max-width :640px) {
+	.meeting-datalist .text-column {
+		text-align: center;
+	}
+}
+</style>
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="card">
+			<h:form id="form">
+
+				<div class="ui-g dashboard">
+					<div class="ui-g-12 ui-md-6 ui-lg-4">
+						<div class="ui-g card colorbox colorbox-2">
+							<div class="ui-g-4">
+								<i class="fa fa-user" />
+							</div>
+							<div class="ui-g-8">
+								<span class="colorbox-name">Employee</span> <span
+									class="colorbox-count">#{dashboard.empList().size()}</span>
+							</div>
+						</div>
+					</div>
+					
+					<div class="ui-g-12 ui-md-6 ui-lg-4">
+						<div class="ui-g card colorbox colorbox-4">
+							<div class="ui-g-4">
+								<i class="fa fa-user-md" />
+							</div>
+							<div class="ui-g-8">
+								<span class="colorbox-name">Applicant</span> <span
+									class="colorbox-count">#{dashboard.applicantList().size()}</span>
+							</div>
+						</div>
+					</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-4" >
+						<div class="ui-g card colorbox-2" style="background-color: aqua;">
+							<h:panelGrid columns="2">
+							<b>Available orphan:</b><p:progressBar style="width:180px;" value="#{dashboard.available()}" labelTemplate="{value}%" displayOnly="true"/>
+							
+							<b>Adopted orphan:</b><p:progressBar style="width:180px;" value="#{dashboard.adopted()}" labelTemplate="{value}%" displayOnly="true"/>
+							</h:panelGrid>
+						</div>
+					</div>
+					<div class="ui-g-12 ui-lg-4 contacts">
+				<p:dataList value="#{dashboard.empList()}" var="employee"
+					type="unordered" itemType="none" paginator="true" rows="3"
+					styleClass="cars-datalist">
+					<f:facet name="header">
+                               Employees
+                            </f:facet>
+					<div style="border-bottom: 1px solid #bdbdbd"
+						class="clearfix car-item">
+						<div class="car-details">
+							<p style="color: #009688;">Names : #{employee.firstName}
+								#{employee.lastName}</p>
+							<p style="color: #009688;">Phone Number : #{employee.phoneNumber}</p>
+						</div>
+					</div>
+				</p:dataList>
+			</div>
+			<div class="ui-g-12 ui-lg-4 contacts">
+				<p:dataList value="#{dashboard.applicantList()}" var="employee"
+					type="unordered" itemType="none" paginator="true" rows="2"
+					styleClass="cars-datalist">
+					<f:facet name="header">
+                               Applicants
+                            </f:facet>
+					<div style="border-bottom: 1px solid #bdbdbd"
+						class="clearfix car-item">
+						<div class="car-details">
+							<p style="color: #009688;">Names : #{employee.firstName}
+								#{employee.lastName}</p>
+							<p style="color: #009688;">Phone Number : #{employee.phoneNumber}</p>
+						</div>
+					</div>
+				</p:dataList>
+			</div>
+			<div class="ui-g-12 ui-lg-4 contacts">
+				<p:dataList value="#{dashboard.orphanList()}" var="orphan"
+					type="unordered" itemType="none" paginator="true" rows="3"
+					styleClass="cars-datalist">
+					<f:facet name="header">
+                               Orphans
+                            </f:facet>
+					<div style="border-bottom: 1px solid #bdbdbd"
+						class="clearfix car-item">
+						<div class="car-details">
+							<p style="color: #009688;">Names : #{orphan.firstName}
+								#{orphan.lastName}</p>
+							<p style="color: #009688;">Stay home:<h:panelGroup rendered="#{orphan.malaika == null}">
+							 Orphanage : #{orphan.orphanage.name}
+							</h:panelGroup>
+							<h:panelGroup rendered="#{orphan.malaika != null}">
+							 Guardian angel : #{orphan.malaika.firstName} #{orphan.malaika.lastName}
+							</h:panelGroup></p>
+						</div>
+					</div>
+				</p:dataList>
+			</div>
+				</div>
+
+
+			</h:form>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

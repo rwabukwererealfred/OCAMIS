@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templateAd.xhtml">
+
+<ui:define name="head">
+<script type="text/javascript">
+function printDiv(divName) {
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
+</script>
+</ui:define>
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl life="4000" showDetail="true" escape="true"
+				autoUpdate="true" />
+				<div>
+				<h:panelGroup style="float:right; margin-bottom:15px;">
+				<p:commandButton icon="fa fa-print" onclick="printDiv('report')"/>
+				</h:panelGroup>
+			</div>	
+			<div id="report">
+			<img src="resources/demo/header.JPG" width="100%" height="120px;"/>
+			<p:tabView>
+			<p:tab title="TransferList">
+			<p:dataTable  var="transfer" value="#{transfering.orphanList}" id="tab1"
+				style="margin-top:20px;">
+				<p:column headerText="No" style="width:100px;">
+				<p:outputLabel value="#{i=i+1}"/>
+		      </p:column>
+				<p:column headerText="Orphan Names">
+				<p:outputLabel value=" #{transfer.firstName}  #{transfer.lastName}"/>
+		       </p:column>
+		       <p:column headerText="From">
+				<p:outputLabel value="#{transfer.orphanage.district.name} District"/>
+				</p:column>
+				<p:column headerText="Orphanage" >
+				<p:outputLabel value="#{transfer.orphanage.name}"/>
+				</p:column>
+				<p:column headerText="To" >
+				<p:outputLabel value="#{transfer.malaika.district.name} District"/>
+				</p:column>
+				<p:column headerText="Guardian Angel" >
+				<h:outputLabel value="#{transfer.malaika.firstName}  #{transfer.malaika.lastName}" />
+				</p:column>
+				
+			</p:dataTable>
+			</p:tab>
+			</p:tabView>
+			</div>
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

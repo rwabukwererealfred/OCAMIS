@@ -1,0 +1,187 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/orphanTemp.xhtml">
+
+	<ui:define name="head">
+
+		<style type="text/css">
+.cars-datalist .text-column p:last-child {
+	color: #757575;
+}
+
+.cars-datalist .car-item i, .cars-datalist .car-item .car-details {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.cars-datalist .car-item button {
+	float: right;
+}
+
+.cars-datalist ul {
+	margin: 0;
+	padding: 0;
+}
+
+.ui-car-display td:last-child {
+	font-weight: 700;
+}
+
+@media ( max-width :640px) {
+	.cars-datalist .text-column {
+		text-align: center;
+	}
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">Data</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="form">
+			<p:messages id="msg" showDetail="true" closable="true" />
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div style="float: left;">
+						<p:panelGrid columns="5" layout="grid"
+							styleClass="ui-panelgrid-blank form-group">
+							<p:outputLabel value="Print report:" />
+							<h:panelGroup styleClass="md-inputfield">
+								<p:calendar value="#{reportByDate.startDate}"
+									pattern="dd/MM/yyyy" />
+								<label>Start Date</label>
+							</h:panelGroup>
+							<h:panelGroup styleClass="md-inputfield">
+								<p:calendar value="#{reportByDate.endDate}" pattern="dd/MM/yyyy" />
+								<label>End Date</label>
+							</h:panelGroup>
+							<p:selectOneMenu value="#{reportByDate.orphan.status}">
+								<f:selectItem itemLabel="Choose Orphan" />
+								<f:selectItem itemLabel="Available" itemValue="Available" />
+								<f:selectItem itemLabel="Adopted" itemValue="Adopted" />
+								<f:selectItem itemLabel="All Orphan" itemValue="All" />
+							</p:selectOneMenu>
+							<p:commandButton icon="fa fa-print"
+								actionListener="#{reportByDate.report()}" ajax="false"/>
+						</p:panelGrid>
+					</div>
+					<br />
+					<br />
+					<br />
+
+
+					<p:dataList value="#{creation.orphanList}" var="orphan" id="tab1"
+						type="unordered" itemType="none" paginator="true" rows="3"
+						styleClass="cars-datalist">
+						<f:facet name="header">
+                                List of all Orphans
+                            </f:facet>
+						<div style="border-bottom: 1px solid #bdbdbd"
+							class="clearfix car-item">
+							<i class="ui-icon ui-icon-person"
+								style="font-size: 100px; color: #757575; margin: 24px;"></i>
+							<div class="car-details">
+								<p>Orphan Details</p>
+								<p style="color: #757575">Names:#{orphan.firstName} -
+									#{orphan.lastName}</p>
+								<p style="color: #757575">She/he is : #{orphan.gender}</p>
+								<p style="color: #757575">Status : #{orphan.status}</p>
+								<p>
+									<p:commandLink actionListener="#{creation.chooseone(orphan)}"
+										value="View Profile" ajax="false" title="View Detail"
+										style="margin:24px 24px 0 0; color:blue;" />
+								</p>
+							</div>
+							<p:commandButton actionListener="#{creation.readFile(orphan)}"
+								icon="fa fa-file-word-o" ajax="false" title="Open File"
+								style="margin:24px 24px 0 0;" />
+								<h:panelGroup rendered="#{orphan.malaika == null}">
+							<h:panelGroup
+								rendered="#{orphan.orphanage.district.districtID == login.employee.district.districtID}">
+								<p:commandButton icon="fa fa-pencil" title="Edit profile"
+									style="margin:24px 24px 0 0;"
+									actionListener="#{creation.listOrphan(orphan)}"
+									oncomplete="PF('edit').show()" update="@widgetVar(edit)" />
+							</h:panelGroup>
+							</h:panelGroup>
+							<h:panelGroup
+								rendered="#{orphan.malaika.district.districtID == login.employee.district.districtID}">
+								<p:commandButton icon="fa fa-pencil" title="Edit profile"
+									style="margin:24px 24px 0 0;"
+									actionListener="#{creation.listOrphan(orphan)}"
+									oncomplete="PF('edit').show()" update="@widgetVar(edit)" />
+							</h:panelGroup>
+							<h:panelGroup></h:panelGroup>
+						</div>
+					</p:dataList>
+
+				</div>
+
+			</div>
+		</h:form>
+		<h:form>
+			<p:dialog widgetVar="edit" showEffect="clip" hideEffect="clip"
+				width="600" height="450" header="update orphan info">
+				<h:panelGrid columns="2" width="200" cellpadding="20px;"
+					style="margin-top:20px;">
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.orphan.nationalityId}" />
+						<label>Nationaliy ID</label>
+					</h:panelGroup>
+					<p:selectOneMenu value="#{creation.orphan.education}">
+						<f:selectItem itemLabel="Education Background"
+							noSelectionOption="true" />
+						<f:selectItem itemLabel="No School" itemValue="No School" />
+						<f:selectItem itemLabel="Primary Level" itemValue="Primary Level" />
+						<f:selectItem itemLabel="A Level" itemValue="A level" />
+						<f:selectItem itemLabel="O Level" itemValue="O level" />
+						<f:selectItem itemLabel="A2" itemValue="A2" />
+					</p:selectOneMenu>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.orphan.weight}" />
+						<label>Weight</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.orphan.height}" />
+						<label>height</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.orphan.hobbit}" />
+						<label>hobbies</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.orphan.fatherName}" />
+						<label>Father Name</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.orphan.motherName}" />
+						<label>Mother Name</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.orphan.religion}" />
+						<label>Religion</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.orphan.comment}" />
+						<label>Other info about child</label>
+					</h:panelGroup>
+				</h:panelGrid>
+
+				<center>
+					<p:commandButton icon="ui-icon-update" value="Update"
+						actionListener="#{creation.updateOrphan()}"
+						onclick="PF('edit').hide()" style="margin-top:50px;"
+						update=":form:tab1 :form:msg" />
+					<p:commandButton value="Cancel" icon="ui-icon-close"
+						onclick="PF('edit').close()"
+						style="margin-left:10px;margin-top:50px;" />
+				</center>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

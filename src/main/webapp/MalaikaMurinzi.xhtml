@@ -1,0 +1,177 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/TemplateM.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:messages showDetail="true" escape="true" closable="true" id="msg" />
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card">
+
+						<div>
+							<p:commandButton value="Add New" icon="ui-icon-plus"
+								style="float:left;" oncomplete="PF('new').show()" />
+							<h:panelGroup style="float:right; margin-bottom:15px;">
+								<p:selectOneMenu value="#{creation.district.districtID}">
+									<f:selectItem itemLabel="Search by District" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{creation.allDistrict()}" var="di"
+										itemLabel="#{di.name}" itemValue="#{di.districtID}" />
+									<f:ajax listener="#{creation.searchByDistrict()}" render="tabl" />
+								</p:selectOneMenu>
+								<p:outputLabel />
+								<p:commandButton icon="fa fa-filter" />
+							</h:panelGroup>
+						</div>
+						<br />
+						<p:dataTable style="margin-top:20px;" value="#{creation.malaikaList}" var="malaika" id="tabl">
+							<f:facet name="header">List Of all Guardian Angel</f:facet>
+
+							<p:column headerText="No" style="width:100px;">
+							#{i=i+1}
+						</p:column>
+							<p:column headerText="Names">
+								#{malaika.firstName} #{malaika.lastName}
+						</p:column>
+							<p:column headerText="Phone Number">
+								#{malaika.phoneNumber}
+						</p:column>
+							<p:column headerText="Gender">
+								#{malaika.gender}
+						</p:column>
+							<p:column headerText="Province">
+								#{malaika.district.province.name}
+						</p:column>
+							<p:column headerText="District">
+						        #{malaika.district.name}
+						</p:column>
+						<p:column headerText="Number">
+						        <p:outputLabel value="#{transfering.orphanNum1(malaika)} Orphan"/>
+						</p:column>
+							<p:column headerText="Option">
+								<center>
+									<p:commandLink id="ss"
+										actionListener="#{creation.selectMalaika(malaika)}"
+										update="@widgetVar(mal)" oncomplete="PF('mal').show()">
+										<i class="fa fa-pencil" />
+										<p:tooltip value="Edit Guardian angel info" for="ss" />
+									</p:commandLink>
+									<p:commandLink id="s" oncomplete="PF('conf').show()" actionListener="#{transfering.orphanageInfo(malaika)}"
+									update="@widgetVar(conf)">
+							<i class="fa fa-send"/>
+							<p:tooltip value="select Guardian Angel" for="s" />
+							</p:commandLink>
+								</center>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form>
+			<p:dialog widgetVar="new" showEffect="clip" hideEffect="clip"
+				width="600" height="450"
+				header="Fill all Information About new Guardian Angel">
+				<h:panelGrid columns="2" width="200" cellpadding="20px;"
+					style="margin-top:20px;">
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.malaika1.firstName}" />
+						<label>FirstName</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.malaika1.lastName}" />
+						<label>LastName</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.malaika1.nationalityId}" />
+						<label>Nationaliy ID</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:calendar value="#{creation.dob}" pattern="dd/MM/yyyy" />
+						<label>Date of Birth</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.malaika1.phoneNumber}" />
+						<label>Phone Number</label>
+					</h:panelGroup>
+					<p:selectOneMenu value="#{creation.malaika1.gender}">
+						<f:selectItem itemLabel="Select Gender" noSelectionOption="true" />
+						<f:selectItem itemLabel="Male" itemValue="Male" />
+						<f:selectItem itemLabel="Female" itemValue="Female" />
+					</p:selectOneMenu>
+					<p:selectOneMenu value="#{creation.provinceID}">
+						<f:selectItem itemLabel="Choose Province" noSelectionOption="true" />
+						<f:selectItems value="#{creation.provinceList}" var="one"
+							itemLabel="#{one.name}" itemValue="#{one.provinceId}" />
+						<f:ajax listener="#{creation.select()}" render="distr" />
+					</p:selectOneMenu>
+					<p:selectOneMenu value="#{creation.district.districtID}" id="distr">
+						<f:selectItem itemLabel="Choose District" noSelectionOption="true" />
+						<f:selectItems value="#{creation.districtList}" var="di"
+							itemLabel="#{di.name}" itemValue="#{di.districtID}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<center>
+					<p:commandButton icon="fa fa-save" value="Save"
+						actionListener="#{creation.addMalaika()}"
+						update=":form:msg :form:tabl" onclick="PF('new').close()"
+						style="margin-top:50px;" />
+					<p:commandButton value="Cancel" icon="ui-icon-close"
+						onclick="PF('new').close()" actionListener="#{creation.malnew()}"
+						style="margin-left:10px;margin-top:50px;" />
+				</center>
+			</p:dialog>
+		</h:form>
+		<h:form>
+			<p:dialog widgetVar="mal" showEffect="clip" hideEffect="clip"
+				width="600" height="450" header="Update form in database">
+				<h:panelGrid columns="2" width="200" cellpadding="20px;"
+					style="margin-top:20px;">
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.malaika.firstName}" />
+						<label>FirstName</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.malaika.lastName}" />
+						<label>LastName</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.malaika.nationalityId}" />
+						<label>Nationaliy ID</label>
+					</h:panelGroup>
+					<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+						<p:inputText value="#{creation.malaika.phoneNumber}" />
+						<label>Phone Number</label>
+					</h:panelGroup>
+					<p:selectOneMenu value="#{creation.malaika.gender}">
+						<f:selectItem itemLabel="Select Gender" noSelectionOption="true" />
+						<f:selectItem itemLabel="Male" itemValue="Male" />
+						<f:selectItem itemLabel="Female" itemValue="Female" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<center>
+					<p:commandButton icon="fa fa-update" value="Update"
+						actionListener="#{creation.update()}"
+						update=":form:msg :form:tabl" oncomplete="PF('mal').close()"
+						style="margin-top:50px;" />
+					<p:commandButton value="Cancel" icon="ui-icon-close"
+						oncomplete="PF('mal').close()"
+						actionListener="#{creation.malnew()}"
+						style="margin-left:10px;margin-top:50px;" />
+				</center>
+			</p:dialog>
+			<p:confirmDialog widgetVar="conf" header="Confirmation Dialog"
+				message="are sure you want to send request?">
+				<p:commandButton icon="fa fa-send" value="Send" actionListener="#{transfering.sendRequest()}"
+					update=":form:msg" onclick="PF('conf').close()" />
+				<p:commandButton value="Cancel"
+					onclick="PF('conf').hide();" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

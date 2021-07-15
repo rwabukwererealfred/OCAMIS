@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/TemplateM.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:messages id="msg" showDetail="true" escape="true" closable="true" />
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card">
+						<p:carousel value="#{transfering.orphanList}"
+							headerText="Orphan List from #{transfering.orphanage.name} orphanage" var="orphan"
+							itemStyleClass="carItem" itemStyle="text-align:center"
+							responsive="true">
+							<p:panelGrid columns="2" style="width:100%"
+								styleClass="ui-panelgrid-blank ui-car-display">
+								<p:graphicImage cache="false"
+									style="height: 200px; width:150px;" styleClass="img-circle"
+									value="#{creation.profilePic}">
+									<f:param name="image" value="#{orphan.orphanId}" />
+								</p:graphicImage>
+								<h:panelGrid columns="2">
+									<b>FirstName:</b>
+									<h:outputLabel value="#{orphan.firstName}" />
+									<b>LastName:</b>
+									<h:outputLabel value="#{orphan.lastName}" />
+									<b>Gender:</b>
+									<h:outputLabel value="#{orphan.gender}" />
+									<b>DateOfBirth:</b>
+									<h:outputFormat value="{0, date, yyyy-MM-dd}">
+										<f:param value="#{orphan.dob}" />
+									</h:outputFormat>
+									<b>Status:</b>
+									<h:outputLabel value="#{orphan.status}" />
+									<b>Option:</b>
+									<p:commandLink id="s" actionListener="#{transfering.selectGuardian(orphan)}">
+										<i class="fa fa-send" />
+										<p:tooltip value="Click to transfer this orphan" for="s" />
+									</p:commandLink>
+								</h:panelGrid>
+							</p:panelGrid>
+							<f:facet name="footer">
+                               From #{transfering.orphanage.district.name} District
+                            </f:facet>
+						</p:carousel>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

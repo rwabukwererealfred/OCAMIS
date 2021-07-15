@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl life="4000" showDetail="true" escape="true"
+				autoUpdate="true" />
+			 <p:dataGrid var="document" value="#{login.documentList}" columns="3" layout="grid"
+                                    rows="6" paginator="true" 
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="3,6,9,12,16">
+
+                            <f:facet name="header">
+                               Document List
+                            </f:facet>
+
+                            <p:panel header="#{login.request.applicant.firstName} #{login.request.applicant.lastName}" style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <i class="fa fa-file" style="font-size:100px;color:#757575;margin:24px;"></i>
+
+                                    <h:outputText value="#{document.documentType}" />
+
+                                    <p:commandButton icon="fa fa-folder-open-o" styleClass="AquaButton" actionListener="#{login.readdoc(document)}" update="@all"/>
+                                    
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </p:dataGrid>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

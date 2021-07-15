@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/TemplateM.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl life="4000" showDetail="true" escape="true"
+				autoUpdate="true" />
+				<p:breadCrumb>
+				<p:menuitem/>
+				<p:menuitem value="CHOOSE GUARDIAN ANGEL"/>
+			</p:breadCrumb>
+			<p:tabView>
+			<p:tab title="From my district">
+			<p:dataTable  var="guardian" value="#{transfering.guardianList}" id="tab1"
+				style="margin-top:20px;" paginator="true" rows="10" selection="#{transfering.malaika}" rowKey="#{guardian.mID}">
+				
+				<p:column headerText="No" style="width:100px;">
+				<p:outputLabel value="#{i=i+1}"/>
+		      </p:column>
+				<p:column headerText="Names">
+				<p:outputLabel value=" #{guardian.firstName}  #{guardian.lastName}"/>
+		       </p:column>
+		       <p:column headerText="Phone Number">
+				<p:outputLabel value="#{guardian.phoneNumber}"/>
+				</p:column>
+				<p:column headerText="Gender" >
+				<p:outputLabel value="#{guardian.gender}"/>
+				</p:column>
+				<p:column headerText="Province">
+				<p:outputLabel value="#{guardian.district.province.name}"/>
+				</p:column>
+				<p:column headerText="District">
+				<h:outputLabel value="#{guardian.district.name}" />
+				</p:column>
+				<p:column selectionMode="single" headerText="Select">
+				</p:column>
+			</p:dataTable>
+			
+			<p:commandButton value="transfer" style="float:right; margin-top:20px;" ajax="false" actionListener="#{transfering.transferAction()}"/>
+			</p:tab>
+			<p:tab title="From Request">
+			<p:dataTable  var="guardian" value="#{transfering.transferList()}"
+				style="margin-top:20px;" paginator="true" rows="10" selection="#{transfering.transfer}" rowKey="#{guardian.transUUID}">
+				
+				
+				<p:column headerText="Names">
+				<p:outputLabel value=" #{guardian.malaika.firstName}  #{guardian.malaika.lastName}"/>
+		       </p:column>
+		       <p:column headerText="Phone Number">
+				<p:outputLabel value="#{guardian.malaika.phoneNumber}"/>
+				</p:column>
+				<p:column headerText="Gender" >
+				<p:outputLabel value="#{guardian.malaika.gender}"/>
+				</p:column>
+				<p:column headerText="Province" >
+				<p:outputLabel value="#{guardian.malaika.district.province.name}"/>
+				</p:column>
+				<p:column headerText="District" >
+				<h:outputLabel value="#{guardian.malaika.district.name}" />
+				</p:column>
+				<p:column headerText="Status" >
+				<h:outputLabel value="#{guardian.status}" />
+				</p:column>
+				<p:column selectionMode="single" headerText="Select">
+				</p:column>
+			</p:dataTable>
+			
+			<p:commandButton value="transfer" style="float:right; margin-top:20px;" ajax="false" actionListener="#{transfering.transferAction1()}"/>
+			</p:tab>
+			</p:tabView>
+			
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

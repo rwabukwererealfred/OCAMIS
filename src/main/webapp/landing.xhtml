@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>PrimeFaces Ultima</title>
+        <h:outputScript name="js/ripple.js" library="ultima-layout" />
+        <script type="text/javascript">
+        $(function() {
+            $('#menu-button').on('click', function(e) {
+                var menu = $('#menu');
+                if(menu.hasClass('lmenu-active')) {
+                    menu.addClass('fadeOutUp');
+                    
+                    setTimeout(function() {
+                        menu.removeClass('fadeOutUp fadeInDown lmenu-active');
+                    },500);
+                }
+                else {
+                    menu.addClass('lmenu-active fadeInDown');
+                }
+                e.preventDefault();
+            });
+        });
+        </script>
+    </h:head>
+
+    <h:body styleClass="landing-body">
+    <h:form>
+        <div class="landing-wrapper">
+        <p:galleria value="#{dashboard.images}" var="image" panelWidth="1350" panelHeight="700">
+            <div id="header" style="background-image:url('resources/image/#{image}'); width: 1400px; height: 900px;">
+                <div class="header-top clearfix">
+                   <img src="resources/demo/images/ncc1.PNG" width="180" height="80"/>
+                   
+                    <ul id="menu" class="animated">
+                       <li><a href="#"><i class="ui-icon ui-icon-home"></i><span>Home</span></a></li>
+                       <li><a href="#features" title="Mission and Vision"><i class="ui-icon ui-icon-list"></i><span>About NCC</span></a></li>
+                       <li><a href="#adoption"><i class="ui-icon ui-icon-person"></i><span>Adoption</span></a></li>
+                       <li><a href="#login"><i class="ui-icon ui-icon-person"></i><span>Login</span></a></li>
+                    </ul>
+                </div>
+                <div >
+                
+                </div>
+            </div>
+             </p:galleria>
+             
+            <div id="features" style="margin-left: 300px;">
+                <h2>Online Children's Adoption MIS for National commission for Children(NCC)</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse delectus sit velit, aspernatur voluptates molestiae, enim recusandae. Odit dicta, maiores quas ad nesciunt, illum expedita veritatis illo quam odio id!</p>
+            
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-4" style="float: left;">
+                        <h3>Mission</h3>
+                        <p>Enhancing child <br/>
+                        rights by coordinating,<br/>
+                        implementing, overseeing <br/>
+                        and monitoring the child protection<br/>
+                        system to give Rwanda’s children the<br/>
+                        opportunity to develop into productive <br/>
+                        and responsible citizens,”of which will<br/>
+                        endeavor to achieve.</p>
+                        <div class="feature-icon">
+                            <i class="material-icons">&#xE150;</i>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-4"  style="float: left;">
+                        <h3>Vision</h3>
+                        <p>“Children enjoying their rights <br/>
+                         and empowered to be worthy and <br/>
+                         patriotic citizens ”</p>
+                        <div class="feature-icon">
+                            <i class="material-icons">&#xE32C;</i>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-4"  style="float: left;">
+                        <h3>Our Values</h3>
+                        <p>Our values are the things we believe<br/>
+                         in that drive the way we do things. To<br/>
+                          achieve our vision we need to respect,<br/>
+                         adopt and be proud of the norms, behaviours<br/>
+                          and patterns that we identify ourselves with as </p>
+                        <div class="feature-icon">
+                            <i class="material-icons">&#xE89D;</i>
+                        </div>
+                    </div>
+                     
+                </div>
+                
+            </div><br/>
+            <div id="adoption" style="margin-top: 350px; margin-left: 100px; margin-right: 20px;">
+            
+                    <h2>About Adoption</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse delectus sit velit, aspernatur voluptates molestiae, enim recusandae. Odit dicta, maiores quas ad nesciunt, illum expedita veritatis illo quam odio id!</p>
+                    
+                </div>
+            <br/>
+            
+            
+           
+           
+           <div class="footer">
+               <div class="footer-content">
+                   <div class="ui-g">
+                        <div class="ui-g-12 ui-md-6">
+                            <p>Online Children's Adoption Management System</p>
+                        </div>
+                        <div class="ui-g-12 ui-md-6">
+                            <ul>
+                                <li><a href="#adoption">Adoption</a></li>
+                                <li><a href="#pricing">login</a></li>
+                                
+                            </ul>
+                            <ul>
+                                <li><a href="#header">Home</a></li>
+                                <li><a href="#features">About NCC</a></li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+               </div>
+           </div>
+        </div>
+        </h:form>
+        <h:outputStylesheet name="css/animate.css" library="ultima-layout" />
+        <h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout" />
+    </h:body>
+
+</html>

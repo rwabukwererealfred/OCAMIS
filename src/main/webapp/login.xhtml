@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Online Children's Adoption MIS</title>
+        <h:outputScript name="js/ripple.js" library="ultima-layout" />
+        <h:outputScript name="js/layout.js" library="ultima-layout" />
+    </h:head>
+
+    <h:body style="background-image:linear-gradient(rgba(255,255,255,0.1),rgba(255,255,255,0.3)), url('./resources/image/nature5.jpg'); ">
+        <div class="card login-panel ui-fluid" style="background-color:rgba(255,255,255,0.8); border-radius:10px;">
+        <h:form>
+        <p:growl showDetail="true"/>
+            <div>
+                <div class="ui-g-12">
+                   <img src="resources/demo/images/login.png" width="100" height="80"/>
+                </div>
+                <div class="ui-g-12">
+                    <h:panelGroup styleClass="md-inputfield">
+                        <p:inputText value="#{login.user.username}"/>
+                        <label>Username</label>
+                    </h:panelGroup>
+                </div><p:spacer height="5px;"/>
+                <div class="ui-g-12">
+                    <h:panelGroup styleClass="md-inputfield">
+                        <p:password value="#{login.user.password}"/>
+                        <label>Password</label>
+                    </h:panelGroup>
+                </div><p:spacer height="10px;"/>
+                <div class="ui-g-12">
+                    <p:commandButton value="Sign In" icon="fa fa-sign-in"
+						action="#{login.log()}" update="@form" >
+						<f:setPropertyActionListener value="#{login.user}" target="#{reportByDate.user}" />
+						<f:setPropertyActionListener value="#{login.user}" target="#{transfering.user}" />
+						</p:commandButton><p:spacer/>
+					<p:commandButton icon="ui-icon-person" value="Create Account"
+						styleClass="green-btn" onclick="PF('option').show()" />
+                    <div style="float: right;">
+                    <p:commandLink value="Forget Password" onclick="PF('password').show()"/>
+                    </div>
+                </div>
+            </div>
+            </h:form>
+        </div>
+        <h:form>
+		<p:dialog widgetVar="option" showEffect="scale" hideEffect="scale"
+			closable="true" modal="true" width="700">
+			<f:facet name="header">
+			  CREATE ACCOUNT AS..
+			</f:facet>
+	<div class="ui-g-12" style="border:1px solid cyan;">
+			
+				
+				   <div class="ui-g-12 ui-md-6">
+				   <p:fieldset legend="Applicant">
+				   <center>
+					<p:commandLink id="s" action="#{creation.applicantSignup()}">
+						<i class="fa fa-user" style="font-size: 150Px;" ></i>
+						<p:tooltip value="Proceed as Applicant" for="s" />
+					</p:commandLink>
+					</center>
+					</p:fieldset>
+					</div>
+				
+					<div class="ui-g-12 ui-md-6">
+					 <p:fieldset legend="Employee">
+					 <center>
+					<p:commandLink id="d" action="#{creation.employeeSignup()}" >
+						<i class="fa fa-user-plus" style="font-size: 150Px;" />
+						<p:tooltip value="Proceed as Employee" for="d" />
+					</p:commandLink>
+					</center>
+					</p:fieldset>
+					</div>
+					
+				</div>
+			
+			
+		</p:dialog>
+		<p:dialog widgetVar="password" showEffect="scale" hideEffect="scale"
+			closable="true" modal="true" header="Type your username" width="300">
+			<p:fieldset legend="add username">
+			<h:panelGrid columns="1" style="margin-top:30px;">
+			<h:panelGroup styleClass="md-inputfield">
+                        <p:inputText value="#{forgetPassword.user.username}"/>
+                        <label>Username</label>
+                  </h:panelGroup>
+                  <p:commandButton icon="fa fa-windows" value="Apply" actionListener="#{forgetPassword.resetcode()}" ajax="false" style="float:right;" />
+                  </h:panelGrid>
+             </p:fieldset>
+		</p:dialog>
+	</h:form>
+        
+        <div class="login-footer">Online Children's Adoption MIS</div>
+        
+        <h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout" />
+    </h:body>
+
+</html>

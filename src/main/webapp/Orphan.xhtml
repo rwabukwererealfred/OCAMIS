@@ -1,0 +1,198 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/orphanTemp.xhtml">
+
+	<ui:define name="content">
+		<p:messages showDetail="true" escape="true" closable="true" autoUpdate="true"/>
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card">
+					<h:form id="form">
+						<center>
+							<p:selectOneMenu value="#{creation.location}">
+								<f:selectItem itemLabel="Choose where Orphan goes"
+									noSelectionOption="true" />
+								<f:selectItem itemLabel="Orphanage" itemValue="Orphanage" />
+								<f:selectItem itemLabel="Guardian Angel" itemValue="Malaika" />
+								<f:ajax render="loc" />
+							</p:selectOneMenu>
+						</center>
+						<h:panelGroup id="loc">
+							<h:panelGroup rendered="#{creation.location == ''}">
+
+							</h:panelGroup>
+							<h:panelGroup rendered="#{creation.location != ''}">
+								<p:fieldset legend="Fill all information About New Orphan">
+									<p:wizard nextLabel="next step" backLabel="previous step">
+										<p:tab title="Orphan Info" >
+											<p:panelGrid columns="2" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="padding:20px;">
+
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputText value="#{creation.orphan.firstName}"
+														style="width:80%;" />
+													<label>FirstName</label>
+												</h:panelGroup>
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputText value="#{creation.orphan.lastName}"
+														style="width:80%;" />
+													<label>LastName</label>
+												</h:panelGroup>
+												<h:panelGroup styleClass="md-inputfield">
+													<p:calendar value="#{creation.dob}" pattern="dd/MMM/yyyy"
+														style="width:80%;" />
+													<label>Date Of Birth</label>
+												</h:panelGroup>
+
+												<p:selectOneMenu value="#{creation.orphan.gender}">
+													<f:selectItem itemLabel="Select Gender"
+														noSelectionOption="true" />
+													<f:selectItem itemLabel="Male" itemValue="Male" />
+													<f:selectItem itemLabel="Female" itemValue="Female" />
+												</p:selectOneMenu>
+												<p:selectOneMenu value="#{creation.orphan.education}">
+													<f:selectItem itemLabel="Education Background"
+														noSelectionOption="true" />
+													<f:selectItem itemLabel="No School"
+														itemValue="No School"/>
+													<f:selectItem itemLabel="Primary Level"
+														itemValue="Primary Level"/>
+													<f:selectItem itemLabel="A Level" itemValue="A level" />
+													<f:selectItem itemLabel="O Level" itemValue="O level" />
+													<f:selectItem itemLabel="A2" itemValue="A2" />
+												</p:selectOneMenu>
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputText value="#{creation.orphan.hobbit}"
+														style="width:80%;" />
+													<label>Hobbies</label>
+												</h:panelGroup>
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputNumber value="#{creation.orphan.height}"
+														style="width:80%;" />
+													<label>Height</label>
+												</h:panelGroup>
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputNumber value="#{creation.orphan.weight}"
+														style="width:80%;" />
+													<label>Weight</label>
+												</h:panelGroup>
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputText value="#{creation.orphan.religion}"
+														style="width:80%;" />
+													<label>Religion</label>
+												</h:panelGroup>
+												<p:fileUpload fileUploadListener="#{creation.uploadProfile}"
+														mode="advanced" dragDropSupport="false" label="Profile"
+														multiple="true" fileLimit="1" style="width:110%" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+											</p:panelGrid>
+										</p:tab>
+										<p:tab title="Next Info">
+											<p:panelGrid columns="2" layout="grid"
+												styleClass="ui-panelgrid-blank form-group"
+												style="padding:20px;">
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputText value="#{creation.orphan.fatherName}"
+														style="width:80%;" />
+													<label>FatherName</label>
+												</h:panelGroup>
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputText value="#{creation.orphan.motherName}"
+														style="width:80%;" />
+													<label>MotherName</label>
+												</h:panelGroup>
+												<h:panelGroup styleClass="md-inputfield">
+													<p:inputTextarea value="#{creation.orphan.comment}"
+														style="width:80%;" />
+													<label>Other missing info</label>
+												</h:panelGroup>
+												<h:panelGrid columns="1">
+													<h:outputLabel
+														value="Attach Medical Certificate, Police Certificate and Abandonment report in One Word file" />
+													<p:fileUpload fileUploadListener="#{creation.uploadFile}"
+														mode="advanced" dragDropSupport="false" label="File"
+														multiple="true" fileLimit="1" style="width:110%" allowTypes="/(\.|\/)(docx)$/" />
+												</h:panelGrid>
+											</p:panelGrid>
+										</p:tab>
+										<p:tab title="Home">
+											<h:panelGroup>
+												<h:panelGroup rendered="#{creation.location =='Orphanage'}">
+													<p:dataTable var="o" value="#{creation.orphanageList}"
+														style="margin-top:20px; margin-bottom:20px;"
+														paginator="true" rows="10"
+														selection="#{creation.orphanage}"
+														rowKey="#{o.orphanageId}">
+														<f:facet name="header">List of All Orphanages</f:facet>
+
+														<p:column headerText="No" style="width:100px;">
+															<p:outputLabel value="#{i=i+1}" />
+														</p:column>
+														<p:column headerText="Names">
+															<p:outputLabel value=" #{o.name}" />
+														</p:column>
+														<p:column headerText="Director">
+															<p:outputLabel value="#{o.director} #{o.lastName}" />
+														</p:column>
+														<p:column headerText="Province">
+															<p:outputLabel value="#{o.district.province.name}" />
+														</p:column>
+														<p:column headerText="District">
+															<h:outputLabel value="#{o.district.name}" />
+														</p:column>
+														<p:column selectionMode="single">
+														</p:column>
+													</p:dataTable>
+													<p:commandButton value="Save" icon="fa fa-save"
+														actionListener="#{creation.addNewOrphan()}" update="@all"
+														style="float:right;" />
+												</h:panelGroup>
+												<h:panelGroup rendered="#{creation.location =='Malaika'}">
+													<p:dataTable var="m" value="#{creation.malaikaList}"
+														style="margin-top:20px; margin-bottom:20px;"
+														paginator="true" rows="10" selection="#{creation.malaika}"
+														rowKey="#{m.mID}">
+														<f:facet name="header">List of All Malaika Murinzi</f:facet>
+
+														<p:column headerText="No" style="width:100px;">
+															<p:outputLabel value="#{i=i+1}" />
+														</p:column>
+														<p:column headerText="Names">
+															<p:outputLabel value=" #{m.firstName} #{m.lastName}" />
+														</p:column>
+														<p:column headerText="Gender">
+															<p:outputLabel value="#{m.gender}" />
+														</p:column>
+														<p:column headerText="PhoneNumber">
+															<p:outputLabel value="#{m.phoneNumber}" />
+														</p:column>
+														<p:column headerText="Province">
+															<p:outputLabel value="#{m.district.province.name}" />
+														</p:column>
+														<p:column headerText="District">
+															<h:outputLabel value="#{m.district.name}" />
+														</p:column>
+														<p:column selectionMode="single">
+														</p:column>
+													</p:dataTable>
+													<p:commandButton value="Save" icon="fa fa-save"
+														actionListener="#{creation.addNewOrphan()}" update="form"
+														style="float:right;"/>
+												</h:panelGroup>
+											</h:panelGroup>
+										</p:tab>
+									</p:wizard>
+								</p:fieldset>
+							</h:panelGroup>
+						</h:panelGroup>
+					</h:form>
+
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/TemplateM.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:messages id="msg" showDetail="true" escape="true" closable="true" />
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card">
+						<img src="resources/demo/header.JPG" width="100%"
+							height="120px;" /> <br />
+						<p:dataGrid var="orphanage" value="#{transfering.orphanageList}" 
+							columns="3" layout="grid">
+							<p:panel header="#{orphanage.name}" toggleable="true"  style="text-align:center">
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group">
+									<p:outputLabel value="location" />
+									<p:outputLabel value="Director" />
+								</p:panelGrid>
+								<p:separator />
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group">
+									<h:panelGrid columns="2">
+										<b>Province:</b>
+										<p:outputLabel value="#{orphanage.district.province.name}" />
+										<b>District:</b>
+										<p:outputLabel value="#{orphanage.district.name}" />
+									</h:panelGrid>
+									<h:panelGrid columns="2">
+										<b>FirstName:</b>
+										<p:outputLabel value="#{orphanage.director}" />
+										<b>LastName:</b>
+										<p:outputLabel value="#{orphanage.lastName}" />
+									</h:panelGrid>
+								</p:panelGrid>
+								<p:separator />
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group">
+									<h:panelGrid columns="2">
+										<b>Number:</b>
+										<p:outputLabel value="#{transfering.orphanNum(orphanage)} orphan"/>
+									</h:panelGrid>
+									<h:panelGrid columns="2">
+										<b>Option:</b>
+										<p:commandLink style="margin-left:5px;" id="s" actionListener="#{transfering.getOrphanage(orphanage)}">
+										<i class="fa fa-send" />
+										<p:tooltip value="Orphan from this orphanage" for="s" />
+									</p:commandLink>
+									</h:panelGrid>
+								</p:panelGrid>
+							</p:panel>
+						</p:dataGrid>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

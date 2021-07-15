@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templateEmploye.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl life="4000" showDetail="true" escape="true"
+				autoUpdate="true" id="msg" />
+			<p:dataTable  var="emp" value="#{creation.empList}" id="tab"
+				style="margin-top:20px;" paginator="true" rows="10">
+				<f:facet name="header">List of Persons who are in charge of Adoption</f:facet>
+				<p:column headerText="No" style="width:30px;">
+		      #{i=i+1}
+		      </p:column>
+				<p:column headerText="Names">
+		        #{emp.firstName}  #{emp.lastName}
+		       </p:column>
+		       <p:column headerText="Phone Number">
+				#{emp.phoneNumber}
+				</p:column>
+				<p:column headerText="Gender" >
+				#{emp.gender}
+				</p:column>
+				<p:column headerText="Province" >
+				#{emp.district.province.name}
+				</p:column>
+				<p:column headerText="District" >
+				#{emp.district.name}
+				</p:column>
+				<p:column style="width:50px;" headerText="Action">
+				<center>
+					 <p:commandLink id="ss"
+											actionListener="#{password.resetcode(emp)}"
+											update=":form:msg :form:tab">
+											<i class="fa fa-user-secret" style="font-size: 20Px;" />
+											<p:tooltip value="click here to reset code" for="ss" />
+										</p:commandLink>
+						</center>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

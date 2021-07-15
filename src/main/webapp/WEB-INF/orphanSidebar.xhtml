@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pu="http://primefaces.org/ultima">
+
+
+	<p:panel toggleable="true" style="top:148px;position:sticky;">
+		<h:form id="menuform_">
+			<p:growl showDetail="true" />
+			<div class="nano">
+				<div class="nano-content menu-scroll-content">
+					<pu:menu widgetVar="me">
+						<p:menuitem id="um_dashboard" value="New Orphan" icon="&#xE871;"  actionListener="#{creation.orphanPage()}" update="@all"/>
+						<p:menuitem id="um_meeting" value="List of Orphans"
+							icon="&#xE871;" outcome="/OrphanList" />
+
+					</pu:menu>
+				</div>
+			</div>
+		</h:form>
+	</p:panel>
+
+
+
+</ui:composition>

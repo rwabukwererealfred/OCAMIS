@@ -1,0 +1,149 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/temps.xhtml">
+
+	<ui:define name="content">
+
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card">
+					<h:form id="form">
+						<p:growl showDetail="true" escape="true" id="msg" />
+						<p:dataTable id="tab" style="margin-top:20px;" paginator="true"
+							rows="10" value="#{dashboard.userList}" var="us">
+							<f:facet name="header">List Of Users</f:facet>
+
+							<p:column headerText="#" width="50">
+								#{i=i+1}
+							</p:column>
+							<p:column headerText="Names">
+								<h:panelGroup>
+									<h:panelGroup rendered="#{us.applicant != null}">
+								#{us.applicant.firstName} #{us.applicant.lastName}
+								</h:panelGroup>
+									<h:panelGroup rendered="#{us.employee != null}">
+								#{us.employee.firstName}  #{us.employee.lastName}
+								</h:panelGroup>
+								</h:panelGroup>
+							</p:column>
+
+							<p:column headerText="email">
+								<h:panelGroup>
+									<h:panelGroup rendered="#{us.applicant != null}">
+								#{us.applicant.email} 
+								</h:panelGroup>
+									<h:panelGroup rendered="#{us.employee != null}">
+								#{us.employee.email}
+								</h:panelGroup>
+								</h:panelGroup>
+							</p:column>
+							<p:column headerText="phone number">
+								<h:panelGroup>
+									<h:panelGroup rendered="#{us.applicant != null}">
+								#{us.applicant.phoneNumber}
+								</h:panelGroup>
+									<h:panelGroup rendered="#{us.employee != null}">
+								#{us.employee.phoneNumber}
+								</h:panelGroup>
+								</h:panelGroup>
+							</p:column>
+							<p:column headerText="Username">
+								#{us.username}
+							</p:column>
+							<p:column headerText="Access" width="80">
+								#{us.access}
+							</p:column>
+							<p:column headerText="Active" width="50">
+								<p:inputSwitch value="#{us.state}">
+									<p:ajax listener="#{dashboard.activateUser(us)}"
+										update=":form:msg :form:tab" />
+								</p:inputSwitch>
+							</p:column>
+							<p:column headerText="Option" width="70">
+								<center>
+									<h:panelGroup rendered="#{us.employee != null}">
+										
+										<p:commandLink id="edi" oncomplete="PF('empEdit').show()" update="@widgetVar(empEdit)"
+											actionListener="#{dashboard.updateEmp(us.employee)}">
+											<i class="fa fa-pencil" style="font-size: 20Px;" />
+											<p:tooltip value="click here to edit" for="edi" />
+										</p:commandLink>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{us.employee == null}">
+										<p:commandLink id="ed"
+											actionListener="#{dashboard.updateApplicant(us.applicant)}"
+											oncomplete="PF('applicantEdit').show()"
+											update="@widgetVar(applicantEdit)">
+											<i class="fa fa-pencil" style="font-size: 20Px;" />
+											<p:tooltip value="click here to edit" for="ed" />
+										</p:commandLink>
+									</h:panelGroup>
+								</center>
+							</p:column>
+						</p:dataTable>
+					</h:form>
+					<h:form>
+						<p:dialog widgetVar="applicantEdit" showEffect="clip"
+							hideEffect="clip" width="500" height="300"
+							header="Update users info">
+							<h:panelGrid columns="2" width="200" cellpadding="20px;"
+								style="margin-top:20px;">
+
+								<h:panelGroup tyleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{dashboard.applicant.firstName}" />
+								</h:panelGroup>
+								<h:panelGroup tyleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{dashboard.applicant.lastName}" />
+								</h:panelGroup>
+								
+								<h:panelGroup tyleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{dashboard.applicant.phoneNumber}" />
+								</h:panelGroup>
+								<h:panelGroup tyleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{dashboard.applicant.email}" />
+								</h:panelGroup>
+							</h:panelGrid>
+							<center>
+								<p:commandButton icon="fa fa-update" value="Update" update=":form:tab :form:msg" 
+								onclick="PF('applicantEdit').hide()" actionListener="#{dashboard.updateApp()}" />
+								<p:commandButton value="Cancel" icon="ui-icon-close" onclick="PF('applicantEdit').hide()"
+									style="margin-left:10px;margin-top:50px;" />
+							</center>
+						</p:dialog>
+						<p:dialog widgetVar="empEdit" showEffect="clip"
+							hideEffect="clip" width="500" height="300"
+							header="Update users info">
+							<h:panelGrid columns="2" width="200" cellpadding="20px;"
+								style="margin-top:20px;">
+
+								<h:panelGroup tyleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{dashboard.employee.firstName}" />
+								</h:panelGroup>
+								<h:panelGroup tyleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{dashboard.employee.lastName}" />
+								</h:panelGroup>
+								
+								<h:panelGroup tyleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{dashboard.employee.phoneNumber}" />
+								</h:panelGroup>
+								<h:panelGroup tyleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{dashboard.employee.email}" />
+								</h:panelGroup>
+							</h:panelGrid>
+							<center>
+								<p:commandButton icon="fa fa-update" value="Update" actionListener="#{dashboard.updateEmployee()}"
+								 update=":form:tab :form:msg" onclick="PF('empEdit').hide()"/>
+								<p:commandButton value="Cancel" icon="ui-icon-close" onclick="PF('empEdit').hide()"
+									style="margin-left:10px;margin-top:50px;" />
+							</center>
+						</p:dialog>
+					</h:form>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

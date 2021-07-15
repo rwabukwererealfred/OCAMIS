@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templateAd.xhtml">
+
+<ui:define name="head">
+<script type="text/javascript">
+function printDiv(divName) {
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
+</script>
+</ui:define>
+	<ui:define name="content">
+	
+		<p:messages showDetail="true" escape="true" closable="true" />
+		
+					<h:form>
+						<div>
+							<p:commandButton value="Add New" icon="ui-icon-plus"
+								style="float:left;" oncomplete="PF('new').show()" />
+							<h:panelGroup styleClass="md-inputfield" style="float:right;">
+								<p:commandButton icon="fa fa-print"  onclick="printDiv('print')" ajax="false"/>
+							</h:panelGroup>
+						</div>
+						<br />
+						<div id="print">
+						<img src="resources/demo/header.JPG" width="100%" height="120px;"/>
+						<p:dataTable style="margin-top:20px;"
+							value="#{creation.orphanageList}" var="orphanage">
+							<f:facet name="header"><b style="color:black">LIST OF ORPHANAGE</b></f:facet>
+
+							<p:column headerText="No" style="width:100px;">
+								#{i=i+1}
+							</p:column>
+							<p:column headerText="Names">
+							#{orphanage.name}
+							</p:column>
+
+							<p:column headerText="Province">
+								#{orphanage.district.province.name}
+							</p:column>
+							<p:column headerText="District">
+							#{orphanage.district.name}
+							</p:column>
+							<p:column headerText="Orphan" width="80">
+							<center>
+							<p:commandLink value="#{transfering.orphanNum(orphanage)}" actionListener="#{report.orphanByOrphanage(orphanage)}" ajax="false"/>
+							</center>
+							</p:column>
+						</p:dataTable>
+						</div>
+					</h:form>
+					<h:form>
+						<p:dialog widgetVar="new" showEffect="clip" hideEffect="clip"
+							width="500" height="250"
+							header="Fill all Information About new Orphanage">
+							<h:panelGrid columns="2" width="200" cellpadding="20px;"
+								style="margin-top:20px;">
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.name}" />
+									<label>Orphanage Name</label>
+								</h:panelGroup>
+								<p:selectOneMenu value="#{creation.provinceID}">
+									<f:selectItem itemLabel="Choose Province"
+										noSelectionOption="true" />
+									<f:selectItems value="#{creation.provinceList}" var="one"
+										itemLabel="#{one.name}" itemValue="#{one.provinceId}" />
+									<f:ajax listener="#{creation.select()}" render="distr" />
+								</p:selectOneMenu>
+								<p:selectOneMenu value="#{creation.district.districtID}"
+									id="distr">
+									<f:selectItem itemLabel="Choose District"
+										noSelectionOption="true" />
+									<f:selectItems value="#{creation.districtList}" var="di"
+										itemLabel="#{di.name}" itemValue="#{di.districtID}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+							<center>
+								<p:commandButton icon="fa fa-save" value="Save"
+									actionListener="#{creation.addOrphanage()}" update="@all"
+									oncomplete="PF('new').close()" style="margin-top:50px;" />
+								<p:commandButton value="Cancel"
+									icon="ui-icon-close" oncomplete="PF('new').close()"
+									style="margin-left:10px;margin-top:50px;" />
+							</center>
+						</p:dialog>
+						<p:dialog widgetVar="director" showEffect="clip" hideEffect="clip"
+							width="500" height="250" header="Add Director of Orphanage">
+							<h:panelGrid columns="2" width="200" cellpadding="20px;"
+								style="margin-top:20px;">
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.director}" />
+									<label>First Name</label>
+								</h:panelGroup>
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.lastName}" />
+									<label>Last Name</label>
+								</h:panelGroup>
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.phoneNumber}" />
+									<label>Phone Number</label>
+								</h:panelGroup>
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.email}" />
+									<label>Email</label>
+								</h:panelGroup>
+							</h:panelGrid>
+							<center>
+								<p:commandButton icon="fa fa-save" value="Save"
+									actionListener="#{creation.addDirector()}" update="@all"
+									oncomplete="PF('director').close()" style="margin-top:50px;" />
+								<p:commandButton value="Cancel" update="@all"
+									icon="ui-icon-close" oncomplete="PF('director').close()"
+									style="margin-left:10px;margin-top:50px;" />
+							</center>
+						</p:dialog>
+
+					</h:form>
+			
+	</ui:define>
+
+</ui:composition>

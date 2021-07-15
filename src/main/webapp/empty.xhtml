@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templateEmploye.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl life="4000" showDetail="true" escape="true" />
+			<h:panelGroup id="pan">
+				<h:panelGroup rendered="#{creation.value != 'alpha'}">
+				<p:commandButton value="Add New" icon="ui-icon-plus"
+				update="pan"  actionListener="#{creation.select1()}"/><br />
+					<p:fieldset legend="info about new Employee">
+					<h2>Essential Information </h2>
+					Social workers who specialize in adoption, which is the process of placing children who have been legally
+					 separated from their birth parents with a new family, work in adoption agencies or government organizations.
+					  They facilitate domestic or international adoptions and understand the legal requirements for each case they 
+					  handle. All states mandate licensing for social workers, but requirements vary. They generally must have a 
+					  bachelor's or master's degree in social work and clinical experience.<br/><br/>
+
+
+					Social workers who specialize in adoption coordinate services for families, which can include working for schools, 
+					family service agencies or government organizations. Adoption coordination services may be one component of a larger
+					 social service agency focus, such as assistance for homeless families or legal advocacy for abused children. 
+					 These professionals may help with different types of adoptions
+					</p:fieldset>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{creation.value == 'alpha'}">
+					<p:tabView>
+						<p:tab title="Employee Detail">
+							<p:fieldset legend="Employee info">
+								<p:panelGrid columns="2" layout="grid"
+									styleClass="ui-panelgrid-blank form-group"
+									style="padding:20px;">
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText value="#{password.employee.firstName}"
+											style="width:95%;" />
+										<label>firstname</label>
+									</h:panelGroup>
+									<h:panelGroup styleClass="md-inputfield">
+										<p:inputText value="#{password.employee.lastName}"
+											style="width:95%;" />
+										<label>lastname</label>
+									</h:panelGroup>
+									<h:panelGroup styleClass="md-inputfield"
+										style="margin-top:20px;">
+										<p:inputText value="#{password.employee.phoneNumber}"
+											style="width:95%;" />
+										<label>phone number</label>
+									</h:panelGroup>
+									<h:panelGroup styleClass="md-inputfield"
+										style="margin-top:20px;">
+										<p:calendar style="width:95%;" value="#{password.dob}"
+											pattern="dd/MM/yyyy" />
+										<label>Date of Birth</label>
+									</h:panelGroup>
+									<h:panelGroup styleClass="md-inputfield"
+										style="margin-top:20px;">
+										<p:inputText value="#{password.employee.nationalityId}"
+											style="width:95%;" />
+										<label>nationalId</label>
+									</h:panelGroup>
+									<h:panelGroup styleClass="md-inputfield"
+										style="margin-top:20px;">
+										<p:inputText value="#{password.employee.email}"
+											style="width:95%;" />
+										<label>Email</label>
+									</h:panelGroup>
+
+									<p:selectOneMenu value="#{password.employee.gender}"
+										style="width:90%;margin-top:20px;">
+										<f:selectItem itemLabel="Choose gender"
+											noSelectionOption="true" />
+										<f:selectItem itemLabel="Male" itemValue="Male" />
+										<f:selectItem itemLabel="Female" itemValue="Female" />
+									</p:selectOneMenu>
+									<p:selectOneMenu value="#{password.province.provinceId}"
+										style="width:90%;margin-top:10px;">
+										<f:selectItem itemLabel="Choose Province"
+											noSelectionOption="true" />
+										<f:selectItems value="#{password.provinceList}" var="pro"
+											itemLabel="#{pro.name}" itemValue="#{pro.provinceId}" />
+										<f:ajax render="province" listener="#{password.select()}" />
+									</p:selectOneMenu>
+									<p:selectOneMenu value="#{password.district.districtID}" id="province"
+										style="width:90%;margin-top:10px;">
+										<f:selectItem itemLabel="Choose District"
+											noSelectionOption="true" />
+										<f:selectItems value="#{password.districtList}" var="di"
+											itemLabel="#{di.name}" itemValue="#{di.districtID}" />
+									</p:selectOneMenu>
+								</p:panelGrid>
+								<p:commandButton value="Save" icon="fa fa-save" style="float:right;"
+									action="#{password.code()}" update="@all" ajax="false"/>
+									
+							</p:fieldset>
+
+						</p:tab>
+					</p:tabView>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/userTemp.xhtml">
+                
+<ui:define name="head">
+    <style type="text/css">
+        .cars-datalist .text-column p:last-child{
+            color:#757575;
+        }
+        
+        .cars-datalist .car-item i, .cars-datalist .car-item .car-details {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .cars-datalist .car-item button {
+            float: right;
+        }
+        
+        .cars-datalist ul {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .ui-car-display td:last-child {
+            font-weight: 700;
+        }
+    
+    @media (max-width:640px) {
+        .cars-datalist .text-column {
+            text-align: center;
+        }
+    }
+    </style>
+</ui:define>
+                
+    <ui:define name="title">Data</ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+        <p:messages closable="true" showDetail="true"/>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div>
+							<h:panelGroup styleClass="md-inputfield" style="float:right;">
+								<p:inputText />
+								<label>Search</label>
+								<p:commandButton icon="fa fa-filter" />
+							</h:panelGroup>
+						</div>
+						<br /><br />
+                        <p:dataList value="#{creation.orphanList}" var="orphan" 
+                            type="unordered" itemType="none" paginator="true" rows="3" styleClass="cars-datalist">
+                            <f:facet name="header">
+                                List of all Orphans
+                            </f:facet>
+                            <div style="border-bottom: 1px solid #bdbdbd" class="clearfix car-item">
+                                <i class="ui-icon ui-icon-person" style="font-size:100px;color:#757575;margin:24px;"></i>
+                                <div class="car-details">
+                                    <p>Orphan Details</p>
+                                    <p style="color:#757575">Names:#{orphan.firstName} - #{orphan.lastName}</p>
+                                    <p style="color:#757575">She/he is : #{orphan.gender}</p>
+                                    <p style="color:#757575">Status : #{orphan.status}</p>
+                                    <p><p:commandLink actionListener="#{creation.viewProfile(orphan)}" value="View Profile" ajax="false"  title="View Detail" style="margin:24px 24px 0 0; color:blue;" /></p>
+                                </div>
+                                <h:panelGroup>
+                                <h:panelGroup rendered="#{login.request.status == 'Select Child'}">
+                               <p:commandButton  icon="fa fa-caret-square-o-up" ajax="false"  title="Apply for Adoption" actionListener="#{login.chooseOrphan1(orphan)}" style="margin:24px 24px 0 0;" />
+                            </h:panelGroup>
+                            </h:panelGroup>
+                            </div>
+                        </p:dataList>
+
+                </div>
+            
+            </div>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>PrimeFaces Ultima</title>
+        <h:outputScript name="js/ripple.js" library="ultima-layout" />
+        <script type="text/javascript">
+        $(function() {
+            $('#menu-button').on('click', function(e) {
+                var menu = $('#menu');
+                if(menu.hasClass('lmenu-active')) {
+                    menu.addClass('fadeOutUp');
+                    
+                    setTimeout(function() {
+                        menu.removeClass('fadeOutUp fadeInDown lmenu-active');
+                    },500);
+                }
+                else {
+                    menu.addClass('lmenu-active fadeInDown');
+                }
+                e.preventDefault();
+            });
+        });
+        </script>
+    </h:head>
+
+    <h:body>
+        <div class="landing-wrapper">
+            <div id="header" style="background-color: white;">
+                <div class="header-top clearfix">
+                    <a id="menu-button" href="#">
+                       <span class="fa fa-bars"></span>
+                    </a>
+                    <ul id="menu" class="animated">
+                       <li><a href="#"><i class="ui-icon ui-icon-home"></i><span>Signup</span></a></li>
+                       <li><a href="/OCAMIS/login.xhtml"><i class="ui-icon ui-icon-person"></i><span>Login</span></a></li>
+                    </ul>
+                </div>
+                
+               <div class="card" style="width: 70%; margin: auto;">
+               <h:form>
+               <p:messages showDetail="true" showSummary="true" closable="true"
+			escape="true" style="width:70%;margin:auto;" />
+			<p:panel toggleable="true" closable="true">
+				<h4 style="text-align: center; font-weight: bold;">Employee Sign up</h4>
+				<p:fieldset legend="Fill Required Info">
+					<p:panelGrid columns="2" layout="grid"
+						styleClass="ui-panelgrid-blank form-group" style="padding:20px;">
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputText value="#{creation.employee.code}" style="width:98%;" />
+							<label>Code</label>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:inputText value="#{creation.user.username}" style="width:98%;" />
+							<label>Username</label>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:password feedback="true" inline="true"
+								value="#{creation.user.password}" style="width:98%;" />
+							<label>Password</label>
+						</h:panelGroup>
+
+						<h:panelGroup styleClass="md-inputfield">
+							<p:password value="#{creation.confirm}" style="width:98%;" />
+							<label>Confirm Password</label>
+						</h:panelGroup>
+
+					</p:panelGrid>
+					<p:commandButton value="Register" icon="ui-icon-check" actionListener="#{creation.employeSignup()}"
+						 style="float:right;margin-right:20px;"
+						 update="@form" />
+				</p:fieldset>
+			</p:panel>
+			</h:form>
+		</div>
+            </div>
+        </div>
+        <div class="login-footer">Online Children's Adoption MIS</div>
+        <h:outputStylesheet name="css/animate.css" library="ultima-layout" />
+        <h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout" />
+    </h:body>
+
+</html>

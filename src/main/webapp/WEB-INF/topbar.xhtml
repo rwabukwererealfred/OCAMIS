@@ -1,0 +1,77 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/ultima">
+
+    <div class="topbar clearfix">
+        <div class="topbar-left" style="background-image:url('./resources/demo/images/ncc1.PNG'); background-repeat: no-repeat; background-size: 250px 75px;" >            
+           
+        </div>
+        
+        <div class="topbar-right">
+            <a id="menu-button" href="#">
+                <i></i>
+            </a>
+            
+            <a id="topbar-menu-button" href="#">
+                <i class="material-icons">&#xE5D2;</i>
+            </a>
+            <ul class="topbar-items fadeInDown animated">
+                <ui:fragment rendered="#{guestPreferences.profileMode == 'overlay'||guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
+                
+                    <li class="profile-item">
+                        <a href="#">                            
+                            <div><img src="./resources/demo/images/login.png" width="40" height="40" style="border-radius: 18px;"/></div>
+                            <span class="topbar-item-name"></span>
+                        </a>
+                        
+                        <ul class="ultima-menu animated">
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">&#xE7FD;</i>
+                                    <span>#{login.user.username}</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                            <h:form>
+                                <p:commandLink actionListener="#{login.signout()}" ajax="false">
+                                    <i class="material-icons">&#xE8AC;</i>
+                                    <span>Logout</span>
+                                </p:commandLink>
+                                </h:form>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                </ui:fragment>
+                <li>
+                    <a href="#">
+                        <i class="topbar-icon material-icons animated swing">&#xE0C9;</i>
+                        <span class="topbar-badge animated rubberBand">#{transfering.transferNumber()}</span>
+                        <span class="topbar-item-name">Messages</span>
+                    </a>
+                    <ul class="ultima-menu animated">
+                    <h:panelGroup rendered="#{login.user.employee != null}">
+                    
+						<p:repeat var="transfer" value="#{transfering.transferList()}">
+							<li role="menuitem"><a href="#" class="topbar-message">
+									<i class="fa fa-comment"/>
+									 <span>From #{transfer.employee.district.name} District</span>
+							</a></li>
+						</p:repeat>
+					</h:panelGroup>
+					</ul>
+                    </li>
+               
+                <li style="margin-top: 5px;">
+                   <p:clock pattern="dd/MMM/yyyy HH:mm:ss"/>
+                </li>
+               
+            </ul>
+        </div>
+    </div>
+
+</ui:composition>

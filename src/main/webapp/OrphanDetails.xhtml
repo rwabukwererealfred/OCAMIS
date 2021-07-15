@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/orphanTemp.xhtml">
+
+	<ui:define name="head">
+		<style type="text/css">
+.cars-datalist .text-column p:last-child {
+	color: #757575;
+}
+
+.cars-datalist .car-item i, .cars-datalist .car-item .car-details {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.cars-datalist .car-item button {
+	float: right;
+}
+
+.cars-datalist ul {
+	margin: 0;
+	padding: 0;
+}
+
+.ui-car-display td:last-child {
+	font-weight: 700;
+}
+
+@media ( max-width :640px) {
+	.cars-datalist .text-column {
+		text-align: center;
+	}
+}
+</style>
+	</ui:define>
+
+	<ui:define name="title">Data</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card card-w-title">
+						<p:panelGrid columns="5" layout="grid"
+							styleClass="ui-panelgrid-blank form-group" style="padding:10px;">
+							<h:panelGrid columns="1">
+								<h:outputLabel value="Profile Picture" />
+
+								<p:graphicImage cache="false"
+									style="position:center;height: 200px; width:150px;"
+									styleClass="img-circle" value="#{creation.profilePic}">
+									<f:param name="image" value="#{creation.orphan.orphanId}" />
+								</p:graphicImage>
+							</h:panelGrid>
+							<h:panelGrid columns="1">
+
+								<h:outputLabel
+									value="Names are: #{creation.orphan.firstName} #{creation.orphan.lastName}" />
+								<h:outputLabel value="Gender: #{creation.orphan.gender}" />
+								<h:outputFormat value="Date Of Birth: {0, date, yyyy-MMM-dd}">
+									<f:param value="#{creation.orphan.dob}" />
+								</h:outputFormat>
+
+								<h:outputLabel
+									value="Education Background: #{creation.orphan.education}" />
+
+								<h:outputLabel
+									value="Father Name: #{creation.orphan.fatherName}" />
+
+								<h:outputLabel
+									value="Mother Name: #{creation.orphan.motherName}" />
+							</h:panelGrid>
+							<h:panelGrid columns="1">
+
+								<h:outputLabel value="Height: #{creation.orphan.height} meters" />
+
+								<h:outputLabel
+									value="Weight: #{creation.orphan.weight} kilograms" />
+
+								<h:outputLabel value="Hobbies: #{creation.orphan.hobbit}" />
+
+								<h:outputLabel value="Other: #{creation.orphan.comment}" />
+								<h:panelGroup>
+									<h:panelGroup rendered="#{creation.orphan.malaika == null}">
+										<h:panelGrid columns="2">
+											<h:outputLabel value="Orphanage name:" />
+											<h:outputLabel value="#{creation.orphan.orphanage.name}" />
+											<h:outputLabel value="Province:" />
+											<h:outputLabel
+												value="#{creation.orphan.orphanage.district.province.name}" />
+											<h:outputLabel value="District:" />
+											<h:outputLabel
+												value="#{creation.orphan.orphanage.district.name}" />
+										</h:panelGrid>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{creation.orphan.malaika != null}">
+										<h:panelGrid columns="2">
+											<h:outputLabel value="Guardian angel:" />
+											<h:outputLabel
+												value="#{creation.orphan.malaika.firstName} #{creation.orphan.malaika.lastName}" />
+											<h:outputLabel value="Province:" />
+											<h:outputLabel
+												value="#{creation.orphan.malaika.district.province.name}" />
+											<h:outputLabel value="District:" />
+											<h:outputLabel
+												value="#{creation.orphan.malaika.district.name}" />
+										</h:panelGrid>
+									</h:panelGroup>
+								</h:panelGroup>
+							</h:panelGrid>
+							<h:panelGrid>
+									I am so very special<br/>
+									I have been from the start<br/>
+									Before they held me in their arms<br/>
+									my family held me in their hearts.<br/>
+									And like a single drop of rain<br/>
+									that on still waters fall<br/>
+									My life and love will ripples make<br/>
+									and touch the lives of all.<br/>
+									I am a blessing..
+								</h:panelGrid>
+						</p:panelGrid>
+
+					</div>
+				</div>
+
+			</div>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

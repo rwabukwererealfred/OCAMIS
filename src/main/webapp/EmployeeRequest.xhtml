@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl showDetail="true" escape="true"
+				autoUpdate="true" />
+				<p:messages showDetail="true" autoUpdate="true" closable="true"/>
+				
+			<p:dataTable var="app" value="#{login.findMyRequest}"
+				style="margin-top:20px;" paginator="true" rows="10">
+				<f:facet name="header">All Request</f:facet>
+				<p:column headerText="No" style="width:100px;">
+		      #{i=i+1}
+		      </p:column>
+				<p:column headerText="Names">
+		        #{app.applicant.firstName}   #{app.applicant.lastName}
+		       </p:column>
+				<p:column headerText="Province">
+				#{app.applicant.district.province.name}
+				</p:column>
+				<p:column headerText="District">
+				#{app.applicant.district.name}
+				</p:column>
+				<p:column headerText="Status">
+				#{app.status}
+				</p:column>
+				<p:column headerText="File/Family" style="width:100px;">
+					<center>
+						<p:commandButton icon="fa fa-list" title="view attached file"
+							actionListener="#{login.selectReq(app)}" ajax="false" />
+							<p:commandButton icon="fa fa-slideshare" title="view family member"
+							actionListener="#{login.getFamily(app)}" ajax="false" />
+					</center>
+				</p:column>
+				<p:column headerText="Option" style="width:120px;">
+					<center>
+						<h:panelGroup>
+							<h:panelGroup rendered="#{app.orphan != null}">
+								<p:commandButton icon="fa fa-search"
+									action="#{login.choosenOrphan(app)}" update="@all" title="see Orphan that applicant choose" />
+							</h:panelGroup>
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:panelGroup rendered="#{app.status == 'rejected'}">
+							</h:panelGroup>
+							<h:panelGroup rendered="#{app.status == 'Waiting'}">
+							</h:panelGroup>
+							<h:panelGroup rendered="#{app.status == 'Approved'}">
+							</h:panelGroup>
+							<h:panelGroup rendered="#{app.status != 'rejected' || app.status != 'Approved'}">
+								<p:commandButton icon="ui-icon-check"
+									title="Approve or reject request"
+									action="#{login.selectRequest1(app)}"
+									oncomplete="PF('conf').show()" update="@widgetVar(conf)"/>
+							</h:panelGroup>
+						</h:panelGroup>
+					</center>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+		<h:form id="alpha">
+			<p:confirmDialog widgetVar="conf"
+				message="please approve request if is accepted or reject">
+				<p:commandButton value="Approve" actionListener="#{login.approve()}"
+					update="@all" onclick="PF('conf').close()" />
+				<p:commandButton value="Reject"
+					onclick="PF('mess').show(); PF('conf').hide()" />
+			</p:confirmDialog>
+			<p:dialog widgetVar="mess"
+				header="Write some message for why is rejected" showEffect="clip"
+				hideEffect="clip" closable="true" width="600" modal="true">
+				<p:fieldset legend="content">
+					<p:inputTextarea value="#{login.msg}" rows="10" style="width:98%;" />
+				</p:fieldset>
+				<f:facet name="footer">
+					<p:commandButton value="Send" icon="fa fa-send"
+						action="#{login.reject()}" update="@all"
+						oncomplete="PF('mess').hide()" />
+				</f:facet>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

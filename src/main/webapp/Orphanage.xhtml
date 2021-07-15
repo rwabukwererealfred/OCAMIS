@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/TemplateM.xhtml">
+
+	<ui:define name="content">
+	<h:form id="form">
+		<p:messages id="msg" showDetail="true" escape="true" closable="true" />
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card">
+					
+						<div>
+							<p:commandButton value="Add New" icon="ui-icon-plus"
+								style="float:left;" oncomplete="PF('new').show()" />
+							<h:panelGroup style="float:right; margin-bottom:15px;">
+								<p:selectOneMenu value="#{creation.district.districtID}">
+									<f:selectItem itemLabel="Search by District" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{creation.allDistrict()}" var="di"
+										itemLabel="#{di.name}" itemValue="#{di.districtID}" />
+									<f:ajax listener="#{creation.searchByDistrict1()}" render="tab" />
+								</p:selectOneMenu>
+								<p:outputLabel />
+								<p:commandButton icon="fa fa-filter" />
+							</h:panelGroup>
+						</div>
+						<br />
+						<img src="resources/demo/header.JPG" width="100%" height="120px;"/>
+						<p:dataTable id="tab" style="margin-top:20px;" value="#{creation.orphanageList}" var="orphanage">
+							<f:facet name="header">List Of Orphanage</f:facet>
+
+							<p:column headerText="No" style="width:100px;">
+								#{i=i+1}
+							</p:column>
+							<p:column headerText="Names">
+							#{orphanage.name}
+							</p:column>
+
+							<p:column headerText="Province">
+								#{orphanage.district.province.name}
+							</p:column>
+							<p:column headerText="District">
+							#{orphanage.district.name}
+							</p:column>
+							<p:column headerText="Option" style="widht:50px;">
+								<center>
+									<h:panelGroup>
+										<h:panelGroup rendered="#{login.user.employee != null}">
+											<h:panelGroup rendered="#{orphanage.director== null}">
+												<p:commandButton icon="fa fa-plus"
+													oncomplete="PF('director1').show()"
+													update="@widgetVar(director1)"
+													actionListener="#{creation.selectorphanage(orphanage)}"
+													title="add director of orphanage" />
+											</h:panelGroup>
+											<h:panelGroup rendered="#{orphanage.director != null}">
+												<p:commandButton icon="ui-icon-person"
+													actionListener="#{creation.selectorphanage(orphanage)}"
+													oncomplete="PF('director').show()"
+													update="@widgetVar(director)" title="Director Profile" />
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+								</center>
+							</p:column>
+							<p:column headerText="Transfer">
+							<center>
+							#{transfering.orphanNum(orphanage)} orphan(s)
+							<p:commandLink actionListener="#{transfering.guardianPage(orphanage)}">
+							<i class="fa fa-send"/>
+							</p:commandLink>
+							</center>
+							</p:column>
+						</p:dataTable>
+				</div>
+			</div>
+		</div>
+</h:form>
+<h:form>
+						<p:dialog widgetVar="new" showEffect="clip" hideEffect="clip"
+							width="500" height="250"
+							header="Fill all Information About new Orphanage">
+							<h:panelGrid columns="2" width="200" cellpadding="20px;"
+								style="margin-top:20px;">
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.name}" />
+									<label>Orphanage Name</label>
+								</h:panelGroup>
+								<p:selectOneMenu value="#{creation.provinceID}">
+									<f:selectItem itemLabel="Choose Province"
+										noSelectionOption="true" />
+									<f:selectItems value="#{creation.provinceList}" var="one"
+										itemLabel="#{one.name}" itemValue="#{one.provinceId}" />
+									<f:ajax listener="#{creation.select()}" render="distr" />
+								</p:selectOneMenu>
+								<p:selectOneMenu value="#{creation.district.districtID}"
+									id="distr">
+									<f:selectItem itemLabel="Choose District"
+										noSelectionOption="true" />
+									<f:selectItems value="#{creation.districtList}" var="di"
+										itemLabel="#{di.name}" itemValue="#{di.districtID}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+							<center>
+								<p:commandButton icon="fa fa-save" value="Save"
+									actionListener="#{creation.addOrphanage()}" update=":form:tab :form:msg"
+									onclick="PF('new').hide()" style="margin-top:50px;" />
+								<p:commandButton value="Cancel" icon="ui-icon-close"
+									onclick="PF('new').hide()"
+									style="margin-left:10px;margin-top:50px;" />
+							</center>
+						</p:dialog>
+						<p:dialog widgetVar="director1" showEffect="clip"
+							hideEffect="clip" width="500" height="250"
+							header="Add Director of Orphanage">
+							<h:panelGrid columns="2" width="200" cellpadding="20px;"
+								style="margin-top:20px;">
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.director}" />
+									<label>First Name</label>
+								</h:panelGroup>
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.lastName}" />
+									<label>Last Name</label>
+								</h:panelGroup>
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.phoneNumber}" />
+									<label>Phone Number</label>
+								</h:panelGroup>
+								<h:panelGroup styleClass="md-inputfield" style="width:250px;">
+									<p:inputText value="#{creation.orphanage.email}" />
+									<label>Email</label>
+								</h:panelGroup>
+							</h:panelGrid>
+							<center>
+								<p:commandButton icon="fa fa-save" value="Save"
+									actionListener="#{creation.addDirector()}" update=":form:tab :form:msg"
+									onclick="PF('director').close()" style="margin-top:50px;" />
+								<p:commandButton value="Cancel" update=":form:tab :form:msg"
+									icon="ui-icon-close" onclick="PF('director').close()"
+									style="margin-left:10px;margin-top:50px;" />
+							</center>
+						</p:dialog>
+
+
+						<p:dialog widgetVar="director" showEffect="clip" hideEffect="clip"
+							closable="true" header="Director Profile">
+							<p:panelGrid columns="2">
+								<f:facet name="header">
+									<p:commandLink>
+										<i class="fa fa-user" style="font-size: 120px; color: #fff;" />
+									</p:commandLink>
+								</f:facet>
+
+								<h:outputLabel value="FirstName" />
+								<h:outputLabel value="#{creation.orphanage.director}"
+									style="font-weight:bold;" />
+								<h:outputLabel value="LastName" />
+								<h:outputLabel value="#{creation.orphanage.lastName}"
+									style="font-weight:bold;" />
+								<h:outputLabel value="Email" />
+								<h:outputLabel value="#{creation.orphanage.email}"
+									style="font-weight:bold;" />
+								<h:outputLabel value="phoneNumber" />
+								<h:outputLabel value="#{creation.orphanage.phoneNumber}"
+									style="font-weight:bold;" />
+							</p:panelGrid>
+						</p:dialog>
+					</h:form>
+	</ui:define>
+
+</ui:composition>

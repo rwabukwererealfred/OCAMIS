@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/adminTemp.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+			<p:growl life="4000" showDetail="true" id="msg"/>
+			<p:dataTable id="tab" var="app" value="#{creation.waitingRequest}"
+				style="margin-top:20px;" paginator="true" rows="10">
+				<f:facet name="header">All Waiting Request</f:facet>
+				<p:column headerText="No" style="width:100px;">
+		      #{i=i+1}
+		      </p:column>
+				<p:column headerText="Names">
+		        #{app.applicant.firstName}   #{app.applicant.lastName}
+		       </p:column>
+				<p:column headerText="Province">
+				#{app.applicant.district.province.name}
+				</p:column>
+				<p:column headerText="District">
+				#{app.applicant.district.name}
+				</p:column>
+				<p:column headerText="Status">
+				#{app.status}
+				</p:column>
+				<p:column headerText="Open File" style="width:100px;">
+					<center> <p:commandButton icon="fa fa-folder-open-o"
+						 /> </center>
+				</p:column>
+				<p:column style="width:100px;" headerText="Option">
+					<center> <p:commandButton icon="fa fa-check"
+						actionListener="#{creation.selectRequest1(app)}" update="@widgetVar(request)" oncomplete="PF('request').show()"/>
+					</center>
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+		<h:form>
+		<p:confirmDialog widgetVar="request" header="Confirmation Test"
+				message="Please approve request if is accepted or reject!">
+				<p:commandButton value="Approve" 
+					 onclick=" PF('msg').show(); PF('request').hide()"/>
+				<p:commandButton value="reject"
+					onclick="PF('mess').show(); PF('request').hide() " />
+			</p:confirmDialog>
+			<p:dialog widgetVar="msg"
+				header="Make arrival Date" showEffect="clip"
+				hideEffect="clip" closable="true" width="600" modal="true">
+				<p:fieldset legend="Date">
+					<p:calendar value="#{creation.comingDate}" pattern="dd/MMM/yyyy"/>
+				</p:fieldset>
+				<f:facet name="footer">
+					<p:commandButton value="Approve" icon="fa fa-send"
+						actionListener="#{creation.approveByadmin()}" update=":form:tab :form:msg"
+						onclick="PF('msg').hide()" />
+				</f:facet>
+			</p:dialog>
+			<p:dialog widgetVar="mess"
+				header="Write some message for why is rejected" showEffect="clip"
+				hideEffect="clip" closable="true" width="600" modal="true">
+				<p:fieldset legend="content">
+					<p:inputTextarea value="#{creation.msg}" rows="10" style="width:98%;" />
+				</p:fieldset>
+				<f:facet name="footer">
+					<p:commandButton value="Send" icon="fa fa-send"
+						action="#{creation.rejectByadmin()}" update=":form:tab :form:msg"
+						onclick="PF('mess').hide()" />
+				</f:facet>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
